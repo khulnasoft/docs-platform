@@ -1,0 +1,32 @@
+[
+  {
+    "to": "/tutorials/",
+    "label": "Tutorials",
+    "package": "docs"
+  },
+  {
+    "to": "/faq/",
+    "label": "FAQs",
+    "package": "docs"
+  },
+  {
+    "to": "/",
+    "label": "Developers Reference",
+    "package": "developers"
+  },
+  {
+    "to": "/",
+    "label": "Khulnasoft Learning",
+    "package": "khulnasoft-learning"
+  },
+  {
+    "to": "/changelog/",
+    "label": "Changelog",
+    "package": "docs"
+  },
+  {
+    "to": "https://github.com/khulnasoft/docs-platform/",
+    "label": "Github",
+    "github": true
+  }
+]

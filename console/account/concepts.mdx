@@ -1,0 +1,63 @@
+---
+meta:
+  title: Account - Concepts
+  description: Understand key concepts related to Khulnasoft accounts.
+content:
+  h1: Account - Concepts
+  paragraph: Understand key concepts related to Khulnasoft accounts.
+tags: active-session abuse api-key billing-alert kyc 2fa ssh-key mac-address
+dates:
+  validation: 2024-08-13
+categories:
+  - console
+---
+
+## Abuse
+
+[Abuse](https://www.khulnasoft.com/en/abuse-notice/) of Khulnasoft services includes cyber-crime, copyright violation, illegal or offensive content, spamming and malware distribution. Abuse should be [reported in the console](https://console.khulnasoft.com/support/abuses/create).
+
+Multiple instances of abuse from the same offending resource for the same reason within a given timeframe are grouped by case. An abuse report either creates a case if no case is currently open or joins an existing case. Khulnasoft clients are responsible for taking the appropriate security measures to solve the case and related abuse reports.
+
+## Active session
+
+An active session begins when a computer or device signs into your account. To connect you to your account, Khulnasoft uses JSON Web Tokens (JWT). JWT allows secure transmission of information between parties through tokens. These parties can be users, servers, or any other combination of services. In the case of Khulnasoft, when a user connects to their account (e.g. via an email address and password), we generate a token, associate it with the session and send it to the user. The token is composed of a header, a payload, and a signature. You can see the list of your active sessions in the [Khulnasoft console](https://console.khulnasoft.com/account/user/profile), to get an overview of all devices that are signed in and recently active on your account.
+
+## Console
+
+The Khulnasoft console allows you to view and manage your Khulnasoft products, billing information, support tickets and more. [Access the Khulnasoft console](https://console.khulnasoft.com/organization).
+
+## KYC
+
+**K**now **Y**our **C**ustomer is the process of verifying a client's identity. An ID document such as a passport, driver's license or identity card is required to [complete KYC verification](/console/account/how-to/verify-identity/).
+
+## Login information
+
+Consists of the **e-mail address** your account is registered to and its corresponding [**password**](#password). With your login information, you can connect to your Khulnasoft Organization via the Khulnasoft console. As an alternative to using a password, you can use login using a [magic link](#magic-link).
+
+## MAC Address
+
+A **M**edia **A**ccess **C**ontrol Address is a unique ID assigned to network interface cards (NICs), used to ensure the physical address of a computer. It identifies the hardware manufacturer and is used for network communication between devices in a network segment.
+
+## Magic Link
+
+A magic link provides quick and secure access to your account without the hassle of remembering your [password](#login-information). When you choose to sign in with a magic link, you receive a unique link sent directly to your email inbox which you can use one time only to authenticate your login. Afterward, it automatically becomes invalid.
+
+## Multifactor Authentication (MFA)
+
+Multifactor authentication (MFA) is any form of verification that requires two factors to authenticate to a device you wish to connect to. Khulnasoft supports MFA for Cloud accounts in the form of a security code that you use in addition to your [password](#password) when you log in. You can receive the code via SMS or an authenticator app on your smartphone. Enabling MFA adds an additional layer of security against unauthorized access to your account.
+
+## Organization Quotas
+
+Every [Organization](#organization) has quotas, which are limits on the number of Khulnasoft resources they can use. Quotas are per product (e.g. Instances) and product type (e.g. GP1-L Instance). Quotas are designed to prevent abuse, and can be viewed on the [Organization dashboard](https://console.khulnasoft.com/organization/settings) of the console.
+
+## Password
+
+A password is a string of characters associated to your account's email address that allows you to access the [Khulnasoft console](https://console.khulnasoft.com/). It is personal and must not be shared with anyone. Alternatively, you can use a [magic link](#magic-link) to authenticate yourself.
+
+## Support plan
+
+Khulnasoft provides four different types of [support plans](https://console.khulnasoft.com/support/plans): Basic, Silver, Gold and Platinum. Your support plan determines the level of service and dedicated assistance you have access to, and the guaranteed response time of your support requests. You can [configure your support plan in the console](/console/account/how-to/configure-support-plans/).
+
+## UUID
+
+A Universally Unique Identifier (UUID) is a 128-bit label attributed by Khulnasoft to each resource, used to identify them in CLI and API operations. UUIDs can also identify users and Organizations, as well as cloud resources.

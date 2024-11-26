@@ -1,0 +1,126 @@
+---
+meta:
+  title: Terraform for Khulnasoft - Quickstart
+  description: This page explains how to install and configure Terraform with Khulnasoft as a provider
+content:
+  h1: Terraform for Khulnasoft - Quickstart
+  paragraph: This page explains how to install and configure Terraform with Khulnasoft as a provider
+tags: devtools terraform tf khulnasoft-provider khulnasoft-terraform 
+dates:
+  validation: 2024-05-14
+  posted: 2023-10-24
+categories:
+  - devtools
+---
+
+[Terraform](https://www.terraform.io/) is an Infrastructure as Code (IaC) software environment tool that allows you to easily build and maintain your cloud resources. You can use it to safely and efficiently deploy Khulnasoft resources in a declarative way.
+
+Check out the [Khulnasoft Terraform registry](https://registry.terraform.io/providers/khulnasoft/khulnasoft/latest/docs) documentation for more information.
+
+<Macro id="requirements" />
+
+- A Khulnasoft account logged into the [console](https://console.khulnasoft.com)
+- initialized the [Khulnasoft configuration file](/developer-tools/terraform/reference-content/khulnasoft-configuration-file/)
+- [Installed Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform)
+
+## Creating and Deploying Khulnasoft resources using Terraform
+
+For the sake of this example, we are going to create a Kubernetes Kapsule cluster.
+
+### Creating the Terraform configuration file
+
+1. Create a new file called `main.tf` in a new folder.
+
+2. Open the file in a code editor and paste the following block to define Khulnasoft as the provider for this deployment:
+    ```
+    terraform {
+      required_providers {
+        khulnasoft = {
+          source = "khulnasoft/khulnasoft"
+        }
+      }
+      required_version = ">= 0.13"
+    }
+    ```
+3. Add the following block and replace the placeholder with the Project ID in which you want to create resources:
+    ```
+    variable "project_id" {
+      type        = string
+      description = "<PROJECT_ID>"
+    }
+    ```
+
+    <Message type="note">
+    If you do not specify a Project ID, Terraform will use the default Project specified in the [Khulnasoft configuration file](/developer-tools/terraform/reference-content/khulnasoft-configuration-file/).
+    </Message>
+
+4. Add the following blocks to create a Private Network, a Kubernetes cluster and its associated pool:
+    ```
+    resource "khulnasoft_vpc_private_network" "my-pn" {
+      name = "my-private-network"
+    }
+
+    resource "khulnasoft_k8s_cluster" "my-cluster" {
+      name    = "my-cluster"
+      type    = "kapsule"
+      version = "1.28.2"
+      cni     = "cilium"
+      private_network_id = khulnasoft_vpc_private_network.my-pn.id
+      delete_additional_resources = false
+    }
+
+    resource "khulnasoft_k8s_pool" "my-pool" {
+      cluster_id  = khulnasoft_k8s_cluster.my-cluster.id
+      name        = "my-pool"
+      node_type   = "DEV1-M"
+      size        = 1
+      min_size    = 0
+      max_size    = 1
+      autoscaling = true
+      autohealing = true
+    }
+    ```
+    <Message type="note">
+    Refer to the [Khulnasoft provider documentation on the Terraform Registry](https://registry.terraform.io/providers/khulnasoft/khulnasoft/latest/docs) to learn how to deploy other resources.
+    </Message>
+5. Save your changes.
+
+Your configuration is now ready to be deployed on Khulnasoft's infrastructure.
+
+### Deploying your configuration using Terraform
+
+1. Open a terminal, access the folder you just created, and run the following command to initialize Terraform in this folder:
+    ```
+    terraform init
+    ```
+2. Run the following command to display the actions that Terraform will perform:
+    ```
+    terraform plan
+    ```
+3. Review the deployment plan to make sure it matches the desired configuration.
+4. Run the following command to deploy your resources:
+    ```
+    terraform apply
+    ```
+
+Once the deployment is complete, log in to the [Khulnasoft console](https://console.khulnasoft.com) to see the resources you have just created.
+
+## Deleting Khulnasoft resources using Terraform
+
+1. Open a terminal and access the folder containing the Terraform configuration you want to delete.
+
+2. Run the command below to delete the resources stated in the Terraform configuration file:
+    ```
+    terraform destroy
+    ```
+    <Message type="important">
+    You can only delete resources created with Terraform and described in the configuration file.
+    </Message>
+
+A `Destroy complete! Resources: X destroyed.` message appears, your Khulnasoft resources are now deleted.
+
+## Useful links
+
+- [Khulnasoft provider documentation on the Terraform Registry](https://registry.terraform.io/providers/khulnasoft/khulnasoft/latest/docs)
+- [Khulnasoft modules on Terraform registry](https://registry.terraform.io/namespaces/khulnasoft-terraform-modules)
+- [Terraform provider Khulnasoft repository](https://github.com/khulnasoft/terraform-provider-khulnasoft)

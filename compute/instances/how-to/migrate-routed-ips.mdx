@@ -1,0 +1,81 @@
+---
+meta:
+  title: How to move an Instance to routed flexible IPs
+  description: This page explains how to move your Instance to routed flexible IPs
+content:
+  h1: How to move an Instance to routed flexible IPs
+  paragraph: This page explains how to move your Instance to routed flexible IPs
+tags: instance flexible ip routed
+dates:
+  validation: 2024-11-14
+  posted: 2023-10-11
+categories:
+  - compute
+---
+
+During deployment, each Instance gets a NAT IP from its hosting node, besides its public IP, which is routed to the Instance through a [carrier-grade NAT](/compute/instances/concepts/#carrier-grade-nat-(cgnat)) solution. However, if the underlying hypervisor changes, the NAT IP changes. This can happen when you restart your Instance. The NAT IP lets Instances communicate via an underlying internal network, without public IPs.
+
+Routing a public IP directly to an Instance bypasses NAT IPs, sending traffic to its [routed flexible IP](/compute/instances/concepts/#routed-flexible-ip). The benefit is the IP stays consistent even if the Instance is restarted or moved. Routed IPs also let you assign multiple flexible IPv4s and IPv6s to an Instance, as both IPv4 and IPv6 are supported.
+
+Using a routed flexible IP is recommended for all compatible Instance types, as it allows precise control over network configurations. It simplifies troubleshooting, ensures compatibility with more applications, and allows for enhanced security monitoring.
+
+<Message type="important">
+  * The routed IP feature **is incompatible** with legacy Instance types using the bootscript feature.
+  * Ensure no static network configuration is in use for your public network interface (usually `ens2` or `eth0`)
+  * Ensure that you are not using the internal private IP of the Instance for internal communications. Instead, [attach your Instances to a VPC](/network/vpc/how-to/attach-resources-to-pn/).
+  * You must update the `khulnasoft-ecosystem` and `cloud-init` packages before starting transition.
+</Message>
+
+<Macro id="requirements" />
+
+- A Khulnasoft account logged into the [console](https://console.khulnasoft.com)
+- An [Instance](/compute/instances/how-to/create-an-instance/) that has not been moved to routed IPs
+
+## Updating the required packages
+
+<Message type="tip">
+ To ensure optimal compatibility and security, especially when working with flexible IPs, we recommend to upgrade your Instance to OS versions that have not reached their end of life.
+</Message>
+
+Before proceeding with the migration, consider the following guidelines regarding `khulnasoft-ecosystem` and `cloud-init`:
+
+- `khulnasoft-ecosystem` and `cloud-init`: These packages are not strictly required for routed IPs. However, if they are installed, it is recommended to update them to the latest version.
+- Package availability on older Instances:
+  - `khulnasoft-ecosystem`: Older Instances may not have this package installed. In such cases, no action is required.
+  - `cloud-init`: This package is commonly pre-installed on Instances due to its inclusion in upstream cloud images. For older Instances, a legacy version of `cloud-init` may not impact IPv4 functionality, but IPv6 functionality could be inconsistent with outdated versions.
+
+To check if `khulnasoft-ecosystem` and `cloud-init` are installed and to update them if needed, [log into your Instance using SSH](/compute/instances/how-to/connect-to-instance/) and run the following commands:
+
+* For **Ubuntu and Debian** Instances:
+    ```bash
+    dpkg-query -W khulnasoft-ecosystem || echo "khulnasoft-ecosystem is not installed"
+    apt upgrade khulnasoft-ecosystem cloud-init -y
+    ```
+
+* For **CentOS and Fedora** Instances:
+    ```bash
+    rpm -q khulnasoft-ecosystem || echo "khulnasoft-ecosystem is not installed"
+    dnf update khulnasoft-ecosystem cloud-init -y
+    ```
+
+If `khulnasoft-ecosystem` is not installed, no additional steps are needed for this package. However, it is still recommended to ensure that `cloud-init` is up-to-date to support IPv6 functionality.
+
+## Moving the Instance to routed IPs
+
+1. Select **Instances** from the **Compute** category in the sidebar menu. This will show a list of your Instances. Those eligible to transition to routed IPs are identified with an exclamation mark icon.
+    <Lightbox src="khulnasoft-instance-routedip-transition.webp" alt="" />
+2. Click **Move IP** next to the Instance you wish to move to routed flexible IPs. A pop-up displays.
+    <Message type="tip">
+      Alternatively, you can initiate the transition from your Instance's overview page by clicking the **Move IP** button.
+    </Message>
+3. Type **MIGRATE** to confirm your intent and click **Move to routed IP**. This will initiate the transition process, and your Instance will undergo a reboot.
+    <Message type="note">
+      Post-transition, your Instance will retain its public IP address, but its NAT IP will be removed.
+    </Message>
+After the transition finishes, the notification icon will no longer be visible in your Instances list.
+
+<Message type="tip">
+  For detailed guidance on using the routed flexible IP feature via the Khulnasoft API or CLI tool, refer to our dedicated documentation [Routing public IPs to Instances using the Khulnasoft API](/compute/instances/api-cli/using-routed-ips/).
+</Message>
+
+

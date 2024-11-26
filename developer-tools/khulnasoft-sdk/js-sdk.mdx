@@ -1,0 +1,57 @@
+---
+meta:
+  title: Khulnasoft JS software development kit (SDK)
+  description: This page explains how to install and use the Khulnasoft JS software development kit (SDK)
+content:
+  h1: Khulnasoft JS software development kit (SDK)
+  paragraph: This page explains how to install and use the Khulnasoft JS software development kit (SDK)
+tags: devtools sdk go-sdk khulnasoft-sdk go golang
+dates:
+  validation: 2024-05-23
+  posted: 2023-11-14
+categories:
+  - devtools
+---
+
+The Khulnasoft JS SDK is a dynamic tool for developers who use JavaScript to interact with Khulnasoft's cloud services. It makes complex tasks like managing servers, handling storage operations, and setting up networking more manageable by automating intricate API calls and the authentication process. This SDK is instrumental for integrating or programmatically managing Khulnasoft's cloud resources.
+
+<Message type="important">
+  The SDK is designed to function in a Node.js environment. Browser-based requests are not supported due to CORS restrictions.
+</Message>
+
+## Installing the JS SDK
+
+To use the SDK, you need an access key and a secret key for the Khulnasoft API. Refer to Khulnasoft's [documentation on API keys](/identity-and-access-management/iam/how-to/create-api-keys/) for instructions on creating and retrieving these keys.
+
+Below is a basic setup example:
+
+```ts
+import { Registry, createClient } from '@khulnasoft/sdk'
+
+const client = createClient({
+  accessKey: 'SCWXXXXXXXXXXXXXXXXX',
+  secretKey: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+  defaultProjectId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+  defaultRegion: 'fr-par',
+  defaultZone: 'fr-par-1',
+})
+
+const api = new Registry.v1.API(client)
+```
+
+## Using the SDK
+
+The SDK is written in TypeScript, offering the full benefits of this language. 
+
+* For any product, its types are available under `Product.version`. For example, access the `Image` interface of Registry v1 using `Registry.v1.Image`.
+
+* Khulnasoft also provides exports of **errors** under the `Errors` namespace, which helps differentiate various error cases, like `Errors.PermissionsDeniedError`.
+
+## Contributing
+
+This project is in the early stages of development and is actively evolving. If you are interested in contributing, join us at [#opensource](https://khulnasoft-community.slack.com/app_redirect?channel=opensource) in Khulnasoft's Slack community for discussions.
+
+# Further resources
+* [SDK reference documentation](https://khulnasoft.github.io/khulnasoft-sdk-js)
+* [SDK example projects](https://github.com/khulnasoft/khulnasoft-sdk-js/tree/main/examples)
+* [Developers website](https://www.khulnasoft.com/en/developers/) (API documentation)

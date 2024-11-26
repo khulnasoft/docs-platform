@@ -1,0 +1,69 @@
+---
+meta:
+  title: Guide to deploying ClickHouse® on Khulnasoft Instances
+  description: Discover how to deploy ClickHouse® on Khulnasoft Instances for powerful data management capabilities.
+content:
+  h1: Guide to deploying ClickHouse® on Khulnasoft Instances
+  paragraph: Discover how to deploy ClickHouse® on Khulnasoft Instances for powerful data management capabilities.
+tags: clickhouse big-data
+hero: assets/khulnasoft-clickhouse.webp
+categories:
+  - instances
+dates:
+  validation: 2024-06-17
+  posted: 2022-12-01
+---
+
+ClickHouse® is an open-source column-oriented database management system that allows you to generate analytical data reports in real-time. It uses a user-friendly SQL query dialect, provides built-in analytics capabilities, and its performance exceeds all other column-oriented database management systems.
+
+<Macro id="requirements" />
+
+- A Khulnasoft account logged into the [console](https://console.khulnasoft.com)
+- [Owner](/identity-and-access-management/iam/concepts/#owner) status or [IAM permissions](/identity-and-access-management/iam/concepts/#permission) allowing you to perform actions in the intended Organization
+- An [SSH key](/identity-and-access-management/organizations-and-projects/how-to/create-ssh-key/)
+- An [Instance](/compute/instances/how-to/create-an-instance/) running on Ubuntu or Debian
+
+# Installing ClickHouse
+
+1. [Log into your Instance using SSH](/compute/instances/how-to/connect-to-instance/).
+2. Update the `apt` package cache and upgrade the software already installed on the Instance to the latest version available in the distribution repositories.
+    ```
+    apt update && apy upgrade -y
+    ```
+3. Download the ClickHose installer:
+    ```
+    curl https://clickhouse.com/ | sh
+    ```
+4. Install the ClickHouse binary:
+    ```
+    ./clickhouse install
+    ```
+    <Message type="note">
+        Enter the password for the default user when prompted:
+        ```
+        Enter password for default user:
+        ```
+    </Message>
+5. Decide if you want to accept connections from the network:
+    ```
+    Allow server to accept connections from the network (default is localhost only), [y/N]:
+    ```
+6. Start the ClickHouse server:
+    ```
+    clickhouse start
+    ```
+
+7. Start the `clickhouse-client` with:
+    ```
+    clickhouse-client --password
+    ```
+    Enter the password when prompted:
+    ```
+    root@scw-epic-chatelet:~# clickhouse-client --password
+    ClickHouse client version 24.6.1.3936 (official build).
+    Password for user (default):
+    Connecting to localhost:9000 as user default.
+    Connected to ClickHouse server version 24.6.1.
+    ```
+
+ClickHouse provides a wide range of demo datasets and tutorials to load and test the application. Visit the [official website](https://clickhouse.com/docs/en/getting-started/example-datasets/) and [documentation](https://clickhouse.com/docs/en/home/) for more information.

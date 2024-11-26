@@ -1,0 +1,127 @@
+---
+meta:
+  title: How to use Postman to manage Khulnasoft APIs
+  description: This page shows how to import APIs into Postman, configure your environment variables and authentication, and share your workspace with other users. 
+content:
+  h1: Using Khulnasoft APIs with Postman
+  paragraph: This page shows how to import Khulnasoft APIs into Postman, configure your environment variables and authentication, and share your workspace with other users.  
+tags: postman api json
+categories:
+  - instances
+  - iot-hub
+dates:
+  validation: 2024-10-03
+  posted: 2022-03-24
+---
+
+Postman is an API client that allows you to build, test, and manage APIs through a graphical interface. The platform includes features that make it easy for you to: 
+  - create, import, and test APIs
+  - work collaboratively with other users
+  - create different environments with unique variables
+  - display responses in several programming languages
+  - configure granular request authorization rules, using different authorization types
+  - capture and monitor request data (status, time, size)
+
+In this tutorial, you will learn how to import Khulnasoft APIs into Postman, configure your environment variables and authentication, and share your workspace with other users. 
+
+<Macro id="requirements" />
+
+- A Khulnasoft account logged into the [console](https://console.khulnasoft.com)
+- [Owner](/identity-and-access-management/iam/concepts/#owner) status or [IAM permissions](/identity-and-access-management/iam/concepts/#permission) allowing you to perform actions in the intended Organization
+- A valid [API key](/identity-and-access-management/iam/how-to/create-api-keys/)
+- An account logged into [Postman](https://www.postman.com/postman-account/)
+
+## Importing Khulnasoft APIs into Postman
+
+1. Click **Workspaces** > **Create Workspace** in the top menu of the Postman interface.
+    <Lightbox src="khulnasoft-postman-create-workspace.webp" />
+2. Enter a name and description and select a visibility setting for your workspace. Your workspace displays.
+3. Go to the Khulnasoft [developers website](https://www.khulnasoft.com/en/developers/) and select a product API to download. 
+
+    In this tutorial, we use the [Khulnasoft Instances API](https://www.khulnasoft.com/en/developers/api/instance/).
+4. Click **Download OpenAPI**.
+    <Lightbox src="khulnasoft-postman-download-open-api.webp" />
+5. Click **Collections** > **Import** in the side menu of the Postman interface.
+    <Lightbox src="khulnasoft-postman-import.webp" />
+6. Drag and drop the Instance's Open API `yml` file into the indicated space to upload. 
+7. Click **Import** to conclude. 
+  
+  The Instances API displays under the **Collections** tab in the side menu. The API is organized into files, following the different request categories (including servers, images, placement groups, and IPs).
+
+## Setting up an environment
+
+Postman environments are sets of key/value pairs. They are spaces in which you can store your authentication information to use as variables with your collections.
+
+In this section, we show you how to create an environment with environment variables for a Khulnasoft Project.
+
+1. Click **Create Environment**. 
+2. Enter a name for your environment. 
+3. Configure your variables, as such:
+    - **VARIABLE** - enter the key for your variable.
+    - **TYPE** - select between `default`, which will be visible in plaintext, and `secret`, which will mask the values on the screen.
+    - **INITIAL VALUE** - this is the value shown to other users when you share the variable in a collection, environment, or globals.
+    - **CURRENT VALUE** - this is the value used when you send a request.
+
+    You can add your project ID, and the access key and secret key for your project. We recommend you set your project's secret key as **secret** to increase security.
+
+    <Lightbox src="khulnasoft-postman-add-variables.webp" />
+4. Click **Save** to do so.
+
+## Setting up authorization
+
+You can set up authorization at the collection, request category, and/or request level. In this tutorial, we will set the authorization at the collection level and configure the requests to inherit the setting from the parent.
+
+1. Go to the **Collections** tab.
+2. Click on the Instance API collection. The **Authorization** tab displays by default.
+    <Lightbox src="scalway-postman-authorization-display.webp" />
+3. Select your environment in the top right menu.
+    <Lightbox src="khulnasoft-postman-select-environment.webp" />
+4. Select **API key** as the authorization type.
+5. Enter the following values:
+    - Key: `X-Auth-Token`
+    - Value: `{{SCW_SECRET_KEY}}` - this is the variable you set up in your environment.
+    - Add to: `Header`
+6. Click **Save**.
+7. Go to your request of choice.
+8. Click the **Authorization** tab.
+9. Select **Inherit auth from parent** as the authorization type.
+
+## Running a request
+
+In this tutorial, we will create an Instance through an API request operated with Postman.
+
+1. Go to the **Collections** tab of the Postman interface.
+2. Click the **Create a server** request under **Instance API** > `/instance/v1/zones/{zone}/servers/`.
+3. Go to the **Body** tab of the request.
+4. Edit the `{zone}` variable in the endpoint. In this tutorial, we will create our Instance in `fr-par-1`.
+    <Lightbox src="khulnasoft-postman-endpoint.webp" />
+
+    <Message type="tip">
+      If you always create resources in the same region, you can [set up a variable](/tutorials/postman-api/#setting-up-an-environment) for the zone in your environment.
+    </Message> 
+5. Edit the parameters in the request with your preferences following the example below. In this tutorial, we will create a GP1-M instance with the default local volume.
+    <Message type="note">
+      - For more information on how to fill out the parameters, refer to the [Khulnasoft Developers website](https://www.khulnasoft.com/en/developers/api/instance/#path-instances-create-an-instance).
+      - To find the image UUID, [follow this procedure](/faq/instances/#what-is-a-marketplace-image).
+    </Message> 
+
+    ```json
+    {
+      "name": "my-new-instance",
+      "commercial_type": "DEV1-S",
+      "image": "881d7a33-4cfa-4046-b5cf-c33cb9c62fb6",
+      "enable_ipv6": false,
+      "boot_type": "local",
+      "project": "697ef834-9bd0-4181-ae29-b0bcd0e574ae"
+    }
+    ```
+6. Click **Send**.
+    <Lightbox src="khulnasoft-postman-response.webp" />
+
+You can **Save** to make sure your configuration is stored for future use.
+
+## Going further
+
+Postman also has a Command Line Interface (CLI) called `newman` that you can use to run your collections. [Find out more about newman in the README](https://github.com/postmanlabs/newman).
+
+For more information about how to use Postman features, refer to the [Postman Learning Center](https://learning.postman.com/docs/getting-started/introduction/).

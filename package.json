@@ -1,0 +1,36 @@
+{
+  "name": "docs-content",
+  "description": "Markdown contents submodule for Khulnasoft docs website.",
+  "version": "0.1.0",
+  "license": "CC-BY-NC-SA-4.0",
+  "private": true,
+  "homepage": "https://github.com/khulnasoft/docs-platform#readme",
+  "author": "@fronteamweb",
+  "contributors": [
+    "@khulnasoft-bot"
+  ],
+  "keywords": [
+    "khulnasoft",
+    "docs",
+    "markdown"
+  ],
+  "repository": "github:khulnasoft/docs-platform",
+  "lint-staged": {
+    "*.json": [
+      "yarn format"
+    ]
+  },
+  "devDependencies": {
+
+    "@commitlint/cli": "^19.6.0",
+    "@commitlint/config-conventional": "^19.6.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3"
+  },
+  "scripts": {
+    "prepare": "husky install",
+    "check-slugs": "bin/list-invalid-slugs",
+    "format": "yarn run prettier --config .prettierrc --write \"**/*.json\""
+  }
+}
