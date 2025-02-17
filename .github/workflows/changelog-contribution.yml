@@ -34,7 +34,7 @@ jobs:
       - name: Create pull request towards the main branch
         uses: peter-evans/create-pull-request@v4.1.1
         with:
-          token: ${{ secrets.CHANGELOG_CONTRIBUTION_TOKEN }}
+          token: ${{ secrets.ORG_REPO_TOKEN }}
           commit-message: 'feat(changelog): add new entry'
           committer: Github <noreply@github.com>
           title: 'feat(changelog): ${{ github.event.inputs.small_title }} ${{ steps.current_date.outputs.current_date }}'
